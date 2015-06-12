@@ -27,7 +27,7 @@ function Upload() {
 		for (x = 0; x < finalArray.length; x++) {
 			finalArray[x] = finalArray[x].split(",");
 		}
-        postObj = {"_id" : document.getElementById("bomFile").value.split(" ").join("/").hashCode, "components" : []};
+        postObj = {"_id" : document.getElementById("bomFile").value.split(" ").join("/").hashCode().toString(), "components" : []};
 		for (x = 0; x < finalArray.length; x++) {
             postObj.components[x] = {};
 			postObj.components[x].refdes = finalArray[x][0];
