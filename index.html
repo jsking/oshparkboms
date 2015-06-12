@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Bob-BOM</title>
+		<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript" src="Libraries/FileSaver/FileSaver.js"></script>
+		<script type="text/javascript" src="Libraries/FileReader/FileReader.js"></script>
+        <script type="text/javascript" src="Libraries/PouchDB/pouchdb-3.6.0.min.js"></script>
+	</head>
+	<body onload="pageLoaded">
+		<!--<form action="POST">-->
+        <label>Name</label>
+        <input type="text" id="bomName">
+        <br>
+        <br>
+        <label>Bom File</label>
+        <input type="file" accept="text/csv" id="bomFile">
+        <br>
+        <br>
+        <button onclick="javascript:Upload();">Finalize BOM listing</button>
+        <br>
+        <br>
+	</body>
+</html>
