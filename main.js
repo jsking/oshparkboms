@@ -19,26 +19,40 @@ function pageLoaded () {
 function Upload() {
 	"use strict";
 
-    var x, fileSelector = document.getElementById("bomFile"), file, reader = new FileReader(), bomText, finalText, postObj = [], postJSON;
+    var x, y, fileSelector = document.getElementById("bomFile"), file, reader = new FileReader(), bomText, finalText, postObj = [], postJSON;
     file = fileSelector.files[0];
 	reader.onload = function (e) {
 		finalText = reader.result;
-		var finalArray = finalText.split("\n"), poster = new XMLHttpRequest();
+		var finalArray = finalText.split("\n"), poster = new XMLHttpRequest(), partNumbers = [];
 		for (x = 0; x < finalArray.length; x++) {
 			finalArray[x] = finalArray[x].split(",");
 		}
-        postObj = {"_id" : document.getElementById("bomFile").value.split(" ").join("/").hashCode().toString(), "components" : []};
+        postObj = {"components" : []};
 		for (x = 0; x < finalArray.length; x++) {
-            postObj.components[x] = {};
-			postObj.components[x].refdes = finalArray[x][0];
-			postObj.components[x].device = finalArray[x][1];
-			postObj.components[x].value = finalArray[x][2];
-			postObj.components[x].footprint = finalArray[x][3];
-			postObj.components[x].source = finalArray[x][4];
-			postObj.components[x].partnumber = finalArray[x][5];
+            partNumbers = [];
+            if (partNumbers.length == 0 || partNumbers.search(finalArray[x][5]) == -1) {
+                postObj.components[x] = {};
+                postObj.components[x].refdes = finalArray[x][0];
+                postObj.components[x].device = finalArray[x][1];
+                postObj.components[x].value = finalArray[x][2];
+                postObj.components[x].footprint = finalArray[x][3];
+                postObj.components[x].source = finalArray[x][4];
+                postObj.components[x].partnumber = finalArray[x][5];
+                postObj.components[x].quantity = 1;
+                partNumbers[x] = finalArray[x][5];
+            } else {
+               for (y = 0; y < postObj.components.length; y++) {
+                   if(postObj.components[y].partnumber == finalArray[x][5]) {
+                       postObj.components[y].quantity += 1;
+                       break;
+                   }
+               }
+            }
 		}
 
-		theCouch.put(postObj, function callback (err, res) {
+		theCouch.upsert(document.getElementById("bomFile").value.split(" ").join("/").hashCode().toString(), function(blankObj) {
+            return postObj;
+        }, function callback (err, res) {
             if(!err) {
                 alert("Put a thing!");
             } else {
