@@ -1,15 +1,20 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 
-<html>
-	<head>
-		<title>Bob-BOM</title>
-		<script type="text/javascript" src="main.js"></script>
-		<script type="text/javascript" src="Libraries/FileSaver/FileSaver.js"></script>
-		<script type="text/javascript" src="Libraries/FileReader/FileReader.js"></script>
-        <script type="text/javascript" src="Libraries/PouchDB/pouchdb-3.6.0.min.js"></script>
-        <script type="text/javascript" src="pouchdb.upsert.js"></script>
-	</head>
-	<body onload="pageLoaded()">
+    <html>
+        <head>
+            <title>Bob-BOM</title>
+            <script type="text/javascript" src="main.js"></script>
+            <script type="text/javascript" src="Libraries/FileSaver/FileSaver.js"></script>
+            <script type="text/javascript" src="Libraries/FileReader/FileReader.js"></script>
+            <script type="text/javascript" src="Libraries/PouchDB/pouchdb-3.6.0.min.js"></script>
+            <script type="text/javascript" src="pouchdb.upsert.js"></script>
+            <style>
+                table, th, td {
+                    border: 1px solid black;
+                }
+            </style>
+        </head>
+        <body onload="pageLoaded()">
 		<!--<form action="POST">-->
         <label>Name</label>
         <input type="text" id="bomName">
@@ -22,5 +27,21 @@
         <button onclick="javascript:Upload();">Finalize BOM listing</button>
         <br>
         <br>
+        <br>
+        <h3>Choose BOM to display:</h3>
+        <select id="chooseBom" onchange="listBom();">
+            <option value="choose one">Choose One</option>
+        </select>
+        <br>
+        <br>
+        <table id="displayBOMTable">
+            <tr>
+                <td>REFDES</td>
+                <td>DEVICE</td>
+                <td>VALUE</td>
+                <td>SOURCE</td>
+                <td>PARTNUM</td>
+            </tr>
+        </table>
 	</body>
 </html>
