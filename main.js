@@ -89,20 +89,29 @@ function listBom() {
         bomMenu.removeChild(bomMenu.children[0]);
         chooseItemEnable = false;
     }
-    var table = document.getElementById("displayBOMTable");
+    var table = document.getElementById("displayBOMTable").children[0];
     table.innerHTML = "<tr><td>REFDES</td>\<td>DEVICE</td><td>VALUE</td><td>SOURCE</td><td>PARTNUM</td></tr>";
     theCouch.allDocs({
         include_docs: true
     }).then(function (docs) {
+        var partsScanned = [];
         var components = docs.rows[bomMenu.selectedIndex].doc.components;
         for(var x = 0; x < components.length - 1; x++) {
-            var tableRow = table.children[0].cloneNode(true).children[0];
-            tableRow.children[0].innerHTML = components[x].refdes;
-            tableRow.children[1].innerHTML = components[x].device;
-            tableRow.children[2].innerHTML = components[x].value;
-            tableRow.children[3].innerHTML = components[x].source;
-            tableRow.children[4].innerHTML = components[x].partnumber;
-            table.appendChild(tableRow);
+            var repeatedPartIndex = partsScanned.indexOf(components[x].partnumber);
+            if(repeatedPartIndex != -1) {
+                table.children[repeatedPartIndex].children[5].innerHTML = parseInt(table.children[repeatedPartIndex].children[5].innerHTML)++;
+            } else {
+                var tableRow = table.children[0].cloneNode(true);
+                tableRow.children[0].innerHTML = components[x].refdes;
+                tableRow.children[1].innerHTML = components[x].device;
+                tableRow.children[2].innerHTML = components[x].value;
+                tableRow.children[3].innerHTML = components[x].source;
+                tableRow.children[4].innerHTML = components[x].partnumber;
+                tableRow.children[5].innerHTML = "1";
+
+                table.appendChild(tableRow);
+                partsScanned.push(components[x].partnumber);
+            }
         }
     }).catch(function (err) {
         console.log(err);
